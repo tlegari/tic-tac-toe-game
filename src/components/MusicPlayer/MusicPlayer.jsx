@@ -10,31 +10,28 @@ function MusicPlayer() {
   const { hoverSfx, clickSfx } = useContext(SfxContext);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentSong, setCurrentSong] = useState(randomizeIndex(playList));
-  const [playPromise, setPlayPromise] = useState(null);
   const playerRef = useRef(null);
 
   useEffect(() => {
-    if (isPlaying) { //Returns a promise 
+    if (isPlaying) { 
       const promise = playerRef.current?.play();
       setPlayPromise(promise);
-      if (playerRef.current?.volume) playerRef.current.volume = 0.1;
+      if (playerRef.current?.volume) 
+        playerRef.current.volume = 0.1;
       return;
     }
     playerRef.current?.pause();
   }, [isPlaying, currentSong]);
 
   const shuffleHandler = async () => {
-    await playPromise?.then(() => {
-      playerRef.current?.pause();
-      setIsPlaying(false);
-    });
-
+    playerRef.current?.pause();
+    setIsPlaying(false);
     setCurrentSong(randomizeIndex(playList));
     setIsPlaying(true);
   };
 
-  const displaySong =
-    playList[currentSong].split("/")[6] || playList[currentSong];
+  const displaySong = playList[currentSong].split("/")[6] || playList[currentSong];
+
   return (
     <MusicPlayerWrapper>
       {isPlaying ? (

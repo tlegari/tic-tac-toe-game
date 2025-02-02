@@ -5,21 +5,30 @@ const useSound = (url, options) => {
 
   useEffect(() => {
     const audio = new Audio(url);
+    audio.volume = options.volume || 1.0; 
+    setSound(audio);
 
-    audio.load();
-    audio.volume = options.volume;
-    setSound(audio); // for sound to have a value in it
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    // Cleanup audio on component unmount
+    return () => {
+      if (audio) {
+        audio.pause();
+        audio.currentTime = 0;
+      }
+    };
+  }, [url, options.volume]); // Dependencies for reinitializing audio
 
-  return () => {
+  // Return play function to be triggered by user interaction
+  const play = () => {
     if (sound) {
       sound.play();
+      setTimeout(() => {
+        sound.pause();
+        sound.currentTime = 0; // Reset audio playback
+      }, options.timeout || 1000); // Default timeout if not provided
     }
-    setTimeout(() => {
-      sound.pause();
-      sound.currentTime = 0; //set time to 0 when playing another sfx
-    }, options.timeout);
   };
+
+  return play; // Return play function to trigger sound play
 };
 
 export default useSound;
