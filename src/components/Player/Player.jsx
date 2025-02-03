@@ -1,6 +1,6 @@
 import React from "react";
 import { PlayerWrapper, AvatarWrapper } from "./Player.styled";
-import { Avatar } from 'react-nice-avatar';
+import Avatar from "react-nice-avatar";
 import { SubTitle } from "../../styles/General.styled";
 
 function Player({ player, isPlayeractive }) {

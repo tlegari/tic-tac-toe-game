@@ -43,7 +43,15 @@ function GameCell({ cellItem, index, isWinningCell }) {
     );
   }
   return (
-    <CellStyle onClick={handleCellClick} onMouseEnter={() => hoverSfx()}>
+    <CellStyle 
+      onClick={handleCellClick} 
+      onMouseEnter={() => {
+        console.log("hoverSfx:", hoverSfx);  // Debugging
+        if (typeof hoverSfx === "function") {
+          hoverSfx();
+        }
+      }}
+    >
       {game.turn === "x" ? (
         <IconXoutline className="outlineIcon" />
       ) : (
@@ -51,6 +59,7 @@ function GameCell({ cellItem, index, isWinningCell }) {
       )}
     </CellStyle>
   );
+  
 }
 
 export default GameCell;

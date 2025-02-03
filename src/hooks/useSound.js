@@ -1,34 +1,41 @@
 import { useEffect, useState } from "react";
 
-const useSound = (url, options) => {
-  const [sound, setSound] = useState(false);
+const useSound = (url, options = { volume: 1.0, timeout: 1000 }) => {
+  const [sound, setSound] = useState(null);
 
   useEffect(() => {
     const audio = new Audio(url);
-    audio.volume = options.volume || 1.0; 
+    audio.volume = options.volume;
+    audio.load();
     setSound(audio);
 
-    // Cleanup audio on component unmount
     return () => {
-      if (audio) {
-        audio.pause();
-        audio.currentTime = 0;
-      }
+      audio.pause();
+      audio.currentTime = 0;
     };
-  }, [url, options.volume]); // Dependencies for reinitializing audio
+  }, [url, options.volume]);
 
-  // Return play function to be triggered by user interaction
   const play = () => {
     if (sound) {
-      sound.play();
+      sound.play().catch(error => {
+        console.error("Audio play failed. User interaction required.", error);
+      });
+
       setTimeout(() => {
         sound.pause();
-        sound.currentTime = 0; // Reset audio playback
-      }, options.timeout || 1000); // Default timeout if not provided
+        sound.currentTime = 0;
+      }, options.timeout);
     }
   };
 
-  return play; // Return play function to trigger sound play
+  const stop = () => {
+    if (sound) {
+      sound.pause();
+      sound.currentTime = 0;
+    }
+  };
+
+  return { play, stop };
 };
 
 export default useSound;

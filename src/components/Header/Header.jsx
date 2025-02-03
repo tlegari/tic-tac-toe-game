@@ -18,14 +18,28 @@ function Header() {
           navigate("/");
         }}
         className="logo"
-        onMouseEnter={() => hoverSfx()}
+        onMouseEnter={() => {
+          if (typeof hoverSfx === "function") {
+            hoverSfx();
+          } else {
+            console.error("hoverSfx is not a function:", hoverSfx);
+          }
+        }}
+        
       />
       <span
         onClick={() => {
           clickSfx();
           toggleTheme();
         }}
-        onMouseEnter={() => hoverSfx()}
+        onMouseEnter={() => {
+          if (typeof hoverSfx === "function") {
+            hoverSfx();
+          } else {
+            console.error("hoverSfx is not a function:", hoverSfx);
+          }
+        }}
+        
       >
         {theme === "dark" ? <LightModeIcon /> : <DarkModeIcon />}
       </span>

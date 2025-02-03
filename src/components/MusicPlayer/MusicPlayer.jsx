@@ -14,8 +14,7 @@ function MusicPlayer() {
 
   useEffect(() => {
     if (isPlaying) { 
-      const promise = playerRef.current?.play();
-      setPlayPromise(promise);
+      playerRef.current?.play();
       if (playerRef.current?.volume) 
         playerRef.current.volume = 0.1;
       return;
